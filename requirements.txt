@@ -1,0 +1,3 @@
+# requirements for cbr
+
+requests==2.13.0
