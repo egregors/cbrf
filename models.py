@@ -1,15 +1,7 @@
 # -*- coding: utf-8 -*-
-"""
-    Core cbr.py models
-"""
 from __future__ import unicode_literals, absolute_import
 
-import datetime
-from xml.etree.ElementTree import Element, iselement, XML
-
-import requests
-
-import const
+from xml.etree.ElementTree import Element, iselement
 
 
 class DailyValCurs(object):
@@ -78,8 +70,7 @@ class DailyValCurs(object):
             self.name = raw_xml.find('Name').text
             self.value = raw_xml.find("Value").text
 
-    def __init__(self, date_req=None, lang='rus'):
-        raw_xml = self._get_daily_curs(date_req=date_req, lang=lang)
+    def __init__(self, raw_xml: Element):
 
         if not iselement(raw_xml):
             raise ValueError('"raw_xml" must be xml.etree.ElementTree.Element instance')
@@ -98,40 +89,6 @@ class DailyValCurs(object):
     def _get_all_rates(self):
         return ''.join(['{}\n'.format(valute) for valute in self.valutes])
 
-    def _get_daily_curs(self, date_req: datetime.datetime = None, lang: str = 'rus') -> Element:
-        """ Getting currency for current day.
-
-        see example: http://www.cbr.ru/scripts/Root.asp?PrtId=SXML
-
-        :param date_req:
-        :type date_req: datetime.datetime
-        :param lang: language of API response ('eng' || 'rus')
-        :type lang: str
-
-        :return:
-        """
-        if lang not in ['rus', 'eng']:
-            raise ValueError('"lang" must be string. "rus" or "eng"')
-
-        base_url = const.CBR_API_URLS['daily_rus'] if lang == 'rus' else const.CBR_API_URLS['daily_eng']
-        url = base_url + self._format_data(date_req)
-
-        try:
-            response = requests.get(url=url)
-            response.encoding = 'windows-1251'
-
-        except Exception as err:
-            raise err
-
-        tree = XML(response.text)
-
-        return tree
-
-    @staticmethod
-    def _format_data(date: datetime.datetime) -> str:
-        """ Convert python datetime.datetime date to str for API request """
-        return f'{date.strftime("%d/%m/%Y")}' if date else ''
-
     @property
     def all_rates(self):
         # all rates from self.valutes
@@ -144,3 +101,82 @@ class DailyValCurs(object):
         """
         vals = [val for val in self.valutes if val.id == valute_id]
         return vals[0] if len(vals) > 0 else None
+
+
+class DynamicValCurs(object):
+    """ Set of dynamics records
+
+    <ValCurs ID="R01235" DateRange1="02.03.2001" DateRange2="14.03.2001" name="Foreign Currency Market Dynamic">
+        <Record Date="02.03.2001" Id="R01235">
+            <Nominal>1</Nominal>
+            <Value>28,6200</Value>
+        </Record>
+        <Record Date="03.03.2001" Id="R01235">
+            <Nominal>1</Nominal>
+            <Value>28,6500</Value>
+        </Record>
+    </ValCurs>
+
+    """
+
+    class Record(object):
+        """ Class to deserialize response like:
+
+        <Record Date="02.03.2001" Id="R01235">
+            <Nominal>1</Nominal>
+            <Value>28,6200</Value>
+        </Record>
+
+        """
+
+        def __init__(self, raw_xml: Element):
+            """ Parse and deserialize xml
+
+            :param raw_xml: node element
+            :type raw_xml: xml.etree.ElementTree.Element
+            """
+            self._parse_record_xml_data(raw_xml)
+
+        def __str__(self):
+            return f'[{self.date}]: {self.value}'
+
+        def _parse_record_xml_data(self, raw_xml: Element):
+            """ Parse Valute xml
+
+            :param raw_xml: node element
+            :type raw_xml: xml.etree.ElementTree.Element
+
+            :return: void
+            """
+            if not iselement(raw_xml):
+                raise ValueError('"raw_xml" must be xml.etree.ElementTree.Element instance')
+
+            self.id = raw_xml.attrib['Id']
+            self.date = raw_xml.attrib['Date']
+
+            self.nominal = raw_xml.find('Nominal').text
+            self.value = raw_xml.find("Value").text
+
+    def __init__(self, raw_xml: Element):
+
+        if not iselement(raw_xml):
+            raise ValueError('"raw_xml" must be xml.etree.ElementTree.Element instance')
+
+        self.id = raw_xml.attrib['ID']
+        self.date_range_1 = raw_xml.attrib['DateRange1']
+        self.date_range_2 = raw_xml.attrib['DateRange2']
+        self.name = raw_xml.attrib['name']
+
+        self.records = list()
+        for record in raw_xml:
+            self.records.append(self.Record(record))
+
+    def __str__(self):
+        return f'[{self.date_range_1}:{self.date_range_2}] {self.name}: {len(self.records)}'
+
+    def _get_all_records(self):
+        return ''.join(['{}\n'.format(record) for record in self.records])
+
+    @property
+    def all_records(self):
+        return self._get_all_records()

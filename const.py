@@ -8,7 +8,8 @@ CURRENCY_CODES = {
 }
 
 CBR_API_URLS = {
-    # daily currencies
+    'info': 'http://www.cbr.ru/scripts/XML_val.asp',
     'daily_rus': 'http://www.cbr.ru/scripts/XML_daily.asp?',
-    'daily_eng': 'http://www.cbr.ru/scripts/XML_daily_eng.asp?'
+    'daily_eng': 'http://www.cbr.ru/scripts/XML_daily_eng.asp?',
+    'dynamic': 'http://www.cbr.ru/scripts/XML_dynamic.asp?',
 }
