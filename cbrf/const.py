@@ -7,7 +7,7 @@ CURRENCY_CODES = {
     'EUR': 'R01239',
 }
 
-CBR_API_URLS = {
+CBRF_API_URLS = {
     'info': 'http://www.cbr.ru/scripts/XML_val.asp',
     'daily_rus': 'http://www.cbr.ru/scripts/XML_daily.asp?',
     'daily_eng': 'http://www.cbr.ru/scripts/XML_daily_eng.asp?',
