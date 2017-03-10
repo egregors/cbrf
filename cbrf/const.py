@@ -8,7 +8,7 @@ CURRENCY_CODES = {
 }
 
 CBRF_API_URLS = {
-    'info': 'http://www.cbr.ru/scripts/XML_val.asp',
+    'info': 'http://www.cbr.ru/scripts/XML_valFull.asp',
     'daily_rus': 'http://www.cbr.ru/scripts/XML_daily.asp?',
     'daily_eng': 'http://www.cbr.ru/scripts/XML_daily_eng.asp?',
     'dynamic': 'http://www.cbr.ru/scripts/XML_dynamic.asp?',

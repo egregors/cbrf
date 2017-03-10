@@ -9,6 +9,7 @@ This module implements the cbrf wrapper API.
 :copyright: (c) 2012 by Kenneth Reitz.
 :license: MIT
 """
+
 import datetime
 from xml.etree.ElementTree import XML, Element
 
@@ -51,7 +52,9 @@ def get_daily_rate(date_req: datetime.datetime = None, lang: str = 'rus') -> Ele
     base_url = const.CBRF_API_URLS['daily_rus'] if lang == 'rus' \
         else const.CBRF_API_URLS['daily_eng']
 
-    response = requests.get(url=base_url + utils.date_format(date_req))
+    url = base_url + 'date_req=' + utils.date_format(date_req) if date_req else base_url
+
+    response = requests.get(url=url)
     response.encoding = 'windows-1251'
 
     return XML(response.text)
@@ -59,15 +62,15 @@ def get_daily_rate(date_req: datetime.datetime = None, lang: str = 'rus') -> Ele
 
 def get_dynamic_rates(date_req1: datetime.datetime,
                       date_req2: datetime.datetime,
-                      val_nm_rq: str) -> Element:
+                      currency_id: str) -> Element:
     """
 
     :param date_req1: begin date
     :type date_req1: datetime.datetime
     :param date_req2: end date
     :type date_req2: datetime.datetime
-    :param val_nm_rq: currency code (http://www.cbr.ru/scripts/XML_val.asp?d=0)
-    :type val_nm_rq: str
+    :param currency_id: currency code (http://www.cbr.ru/scripts/XML_val.asp?d=0)
+    :type currency_id: str
 
     :return: :class: `Element <Element 'ValCurs'>` object
     :rtype: ElementTree.Element
@@ -75,7 +78,7 @@ def get_dynamic_rates(date_req1: datetime.datetime,
     url = const.CBRF_API_URLS['dynamic'] + \
           f'date_req1={utils.date_format(date_req1)}&' \
           f'date_req2={utils.date_format(date_req2)}&' \
-          f'VAL_NM_RQ={val_nm_rq}'
+          f'VAL_NM_RQ={currency_id}'
 
     response = requests.get(url=url)
     response.encoding = 'windows-1251'
