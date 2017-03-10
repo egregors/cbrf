@@ -2,13 +2,12 @@
 from __future__ import unicode_literals, absolute_import
 
 from datetime import datetime
+from decimal import Decimal
 from unittest import TestCase
 from xml.etree.ElementTree import Element
 
-from cbrf import get_currencies_info
-from cbrf import get_daily_rate
-from cbrf import get_dynamic_rates
-from cbrf.models import Currency, DailyCurrencyRate
+from cbrf import (get_currencies_info, get_daily_rate, get_dynamic_rates)
+from cbrf.models import Currency, DailyCurrencyRate, DynamicCurrencyRate
 
 
 class CbrfAPITestCase(TestCase):
@@ -57,3 +56,11 @@ class CbrfModelsTestCase(TestCase):
         self.assertEqual(d.char_code, 'AUD')
         self.assertEqual(d.denomination, 1)
         self.assertEqual(d.name, 'Австралийский доллар')
+
+    def test_dynamic_currency_rate(self):
+        date_1 = datetime(2001, 3, 2)
+        date_2 = datetime(2001, 3, 14)
+        d = DynamicCurrencyRate(get_dynamic_rates(date_req1=date_1, date_req2=date_2, currency_id='R01235')[0])
+
+        self.assertEqual(d.denomination, 1)
+        self.assertEqual(d.value, Decimal('28.6200'))

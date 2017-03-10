@@ -52,7 +52,7 @@ def get_daily_rate(date_req: datetime.datetime = None, lang: str = 'rus') -> Ele
     base_url = const.CBRF_API_URLS['daily_rus'] if lang == 'rus' \
         else const.CBRF_API_URLS['daily_eng']
 
-    url = base_url + 'date_req=' + utils.date_format(date_req) if date_req else base_url
+    url = base_url + 'date_req=' + utils.date_to_str(date_req) if date_req else base_url
 
     response = requests.get(url=url)
     response.encoding = 'windows-1251'
@@ -76,8 +76,8 @@ def get_dynamic_rates(date_req1: datetime.datetime,
     :rtype: ElementTree.Element
     """
     url = const.CBRF_API_URLS['dynamic'] + \
-          f'date_req1={utils.date_format(date_req1)}&' \
-          f'date_req2={utils.date_format(date_req2)}&' \
+          f'date_req1={utils.date_to_str(date_req1)}&' \
+          f'date_req2={utils.date_to_str(date_req2)}&' \
           f'VAL_NM_RQ={currency_id}'
 
     response = requests.get(url=url)

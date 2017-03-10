@@ -12,7 +12,7 @@ This module implements the cbrf wrapper API.
 import datetime
 
 
-def date_format(date: datetime.datetime) -> str:
+def date_to_str(date: datetime.datetime) -> str:
     """ Convert python datetime.datetime date to str for API request
 
     :param date: date for format
@@ -21,3 +21,17 @@ def date_format(date: datetime.datetime) -> str:
     :rtype: str
     """
     return f'{date.strftime("%d/%m/%Y")}' if date else ''
+
+
+def str_to_date(date: str) -> datetime.datetime:
+    """ Convert cbr.ru API date ste to python datetime
+
+    :param date: date from API response
+
+    :return: date like datetime
+    :rtype: datetime
+    """
+    date = date.split('.')
+    date.reverse()
+    y, m, d = date
+    return datetime.datetime(int(y), int(m), int(d))

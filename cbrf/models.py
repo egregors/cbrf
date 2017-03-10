@@ -13,6 +13,8 @@ from __future__ import unicode_literals, absolute_import
 from decimal import Decimal
 from xml.etree.ElementTree import Element
 
+from cbrf.utils import str_to_date
+
 
 class Currency(object):
     """ Class to deserialize response like:
@@ -74,4 +76,30 @@ class DailyCurrencyRate(object):
         self.char_code = elem.find('CharCode').text
         self.denomination = int(elem.find('Nominal').text)
         self.name = elem.find('Name').text
+        self.value = Decimal(elem.find('Value').text.replace(',', '.'))
+
+
+class DynamicCurrencyRate(object):
+    """ Class to deserialize response like:
+
+     http://www.cbr.ru/scripts/XML_dynamic.asp?date_req1=02/03/2001&date_req2=14/03/2001&VAL_NM_RQ=R01235
+
+     <Record Date="02.03.2001" Id="R01235">
+         <Nominal>1</Nominal>
+         <Value>28,6200</Value>
+     </Record>
+
+    """
+
+    def __init__(self, elem: Element):
+        if elem:
+            self._parse_dynamic_currency_rate(elem)
+
+    def __str__(self):
+        return f'[{self.id} | {self.date}]: {self.value}'
+
+    def _parse_dynamic_currency_rate(self, elem: Element):
+        self.id = elem.attrib['Id']
+        self.date = str_to_date(elem.attrib['Date'])
+        self.denomination = int(elem.find('Nominal').text)
         self.value = Decimal(elem.find('Value').text.replace(',', '.'))
