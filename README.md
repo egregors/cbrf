@@ -2,7 +2,7 @@
 
 _Wrapper for The Central Bank of the Russian Federation site API_
 
-[![Build Status](https://travis-ci.org/Egregors/cbrf.svg?branch=master)](https://travis-ci.org/Egregors/django-silly-search)
+[![Build Status](https://travis-ci.org/Egregors/cbrf.svg?branch=master)](https://travis-ci.org/Egregors/cbrf)
 
 [Site](http://www.cbr.ru/) and [API](http://www.cbr.ru/scripts/Root.asp?PrtId=SXML)
  of The Central Bank of the Russian Federation.
