@@ -2,11 +2,9 @@
 
 """
 cbrf.utils
-~~~~~~~~
+~~~~~~~~~~
 
-This module implements the cbrf wrapper API.
-
-:copyright: (c) 2012 by Kenneth Reitz.
+:copyright: (c) 2017 by Vadim Iskuchekov (@egregors)
 :license: MIT
 """
 import datetime

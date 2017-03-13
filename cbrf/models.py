@@ -3,9 +3,9 @@
 cbrf.models
 ~~~~~~~~
 
-This module implements the cbrf wrapper API.
+This module implements models for comfortable work with cbrf wrapper API.
 
-:copyright: (c) 2012 by Kenneth Reitz.
+:copyright: (c) 2017 by Vadim Iskuchekov (@egregors)
 :license: MIT
 """
 from __future__ import unicode_literals, absolute_import
