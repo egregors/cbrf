@@ -10,10 +10,12 @@ This module implements the cbrf wrapper API.
 """
 from __future__ import unicode_literals, absolute_import
 
+import datetime
 from decimal import Decimal
 from xml.etree.ElementTree import Element
 
 from cbrf import get_currencies_info
+from cbrf import get_daily_rates
 from cbrf.utils import str_to_date
 
 
@@ -112,6 +114,7 @@ class CurrenciesInfo(object):
 
     def __init__(self):
         self._raw_currencies = get_currencies_info()
+
         self.currencies = list()
 
         for currency in self._raw_currencies:
@@ -128,5 +131,27 @@ class CurrenciesInfo(object):
         """
         try:
             return [_ for _ in self.currencies if _.id == id_code][0]
+        except IndexError:
+            return None
+
+
+class DailyCurrenciesRates(object):
+    """ Full set of daily rates """
+
+    def __init__(self, date: datetime.datetime = None, lang: str = 'rus'):
+        self._raw_daily_rates = get_daily_rates(date_req=date, lang=lang)
+        self.date = str_to_date(self._raw_daily_rates.attrib['Date'])
+
+        self.rates = list()
+
+        for rate in self._raw_daily_rates:
+            self.rates.append(DailyCurrencyRecord(rate))
+
+    def __str__(self):
+        return f'[{len(self.rates)}] rates for {self.date.strftime("%d/%m/%Y")}'
+
+    def get_by_id(self, id_code: str) -> DailyCurrencyRecord or None:
+        try:
+            return [_ for _ in self.rates if _.id == id_code][0]
         except IndexError:
             return None

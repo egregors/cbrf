@@ -6,8 +6,8 @@ from decimal import Decimal
 from unittest import TestCase
 from xml.etree.ElementTree import Element
 
-from cbrf import (get_currencies_info, get_daily_rate, get_dynamic_rates)
-from cbrf.models import Currency, DailyCurrencyRecord, DynamicCurrencyRecord, CurrenciesInfo
+from cbrf import (get_currencies_info, get_daily_rates, get_dynamic_rates)
+from cbrf.models import Currency, DailyCurrencyRecord, DynamicCurrencyRecord, CurrenciesInfo, DailyCurrenciesRates
 
 
 class CbrfAPITestCase(TestCase):
@@ -19,7 +19,7 @@ class CbrfAPITestCase(TestCase):
 
     def test_get_daily_rate(self):
         date = datetime(2014, 10, 24)
-        rates = get_daily_rate(date_req=date)
+        rates = get_daily_rates(date_req=date)
 
         aud = rates[0]
 
@@ -49,7 +49,7 @@ class CbrfModelsTestCase(TestCase):
         self.assertEqual(c.iso_char_code, 'MDL')
 
     def test_daily_currency_rate(self):
-        d = DailyCurrencyRecord(get_daily_rate()[0])
+        d = DailyCurrencyRecord(get_daily_rates()[0])
 
         self.assertEqual(d.id, 'R01010')
         self.assertEqual(d.num_code, '036')
@@ -73,3 +73,22 @@ class CbrfModelsTestCase(TestCase):
         irish_pound = c_info.get_by_id(irish_pound_id)
         self.assertEqual(irish_pound.id, irish_pound_id)
         self.assertEqual(irish_pound.iso_num_code, 372)
+
+        bad_id = 'lol'
+        self.assertIsNone(c_info.get_by_id(bad_id))
+
+    def test_daily_currencies_rates(self):
+        date = datetime(2007, 1, 20)
+        daily_rates = DailyCurrenciesRates(date)
+
+        self.assertEqual(daily_rates.date, date)
+        self.assertEqual(len(daily_rates.rates), 18)
+
+        gbp_id = 'R01035'
+        gbp = daily_rates.get_by_id(gbp_id)
+
+        self.assertEqual(gbp.id, gbp_id)
+        self.assertEqual(gbp.num_code, '826')
+
+        bad_id = 'gg wp'
+        self.assertIsNone(daily_rates.get_by_id(bad_id))

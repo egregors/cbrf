@@ -28,7 +28,7 @@ To get raw XML answers you should use `cbrf.api` methods:
 >>> cbrf.get_currencies_info()
 <Element 'Valuta' at 0x10b91f688>
 
->>> cbrf.get_daily_rate()
+>>> cbrf.get_daily_rates()
 <Element 'ValCurs' at 0x10b82b9a8>
 
 >>> date_1 = datetime(2001, 3, 2)

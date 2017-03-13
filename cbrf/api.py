@@ -33,7 +33,7 @@ def get_currencies_info() -> Element:
     return XML(response.text)
 
 
-def get_daily_rate(date_req: datetime.datetime = None, lang: str = 'rus') -> Element:
+def get_daily_rates(date_req: datetime.datetime = None, lang: str = 'rus') -> Element:
     """ Getting currency for current day.
 
     see example: http://www.cbr.ru/scripts/Root.asp?PrtId=SXML
