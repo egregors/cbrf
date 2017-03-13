@@ -1,11 +1,18 @@
 language: python
 python:
-  - "3.6"
+  - '3.6'
 install:
   - pip install -r requirements.txt
   - pip install -e .
 branches:
- only:
-  - master
+  only:
+    - master
 script:
   - pytest cbrf/tests.py
+deploy:
+  provider: pypi
+  user: egregors
+  password:
+    secure: XCtpyzcp0DEKpwKH2ZAyD0kGjf6J2QMc2kXBTIwlv0G+yc3VV3pIzGtK7Xm+2wgyELqErLgV2sLu3JW56t7g8/C3YUIw1yDGNroQucRkvOqmblC636kdFEzHPJUpClMAg1Z3k4EaQjJYpcd/HyXwpcdp9AHQSIIspkbsWomycfqrbl6F4Ad2mcpY3ZByb7jwEbR0aji2iWUlExz/gYRsszwm6DkGniN1Bq7hsVp/Zbx4M7BkhUvAdz5KBJblFsAoJ0sEhbsz7+M2KJPT8HAW+dotkpy75l7Qn7N8rkNje70N3iGAkJuc4MWTXFeIv3SF4gX8Hc2Myd12bPk3BsHqNS5u3gtlOh5rGkK2XL8tNE2OHt5ECveNslvfdFurPkyexjfE5tkACZzwXUOncADy/Wp/ZFabZN7Ums7K6oHdEdcz2jhreh36m8TeUQ2h+8nWSDZZigQ7I5IQeSlPry74HvlarNWJR46dkwd1GBiZwZswAuWy3nOOgRCkaQzjvFsUrIGigib/1s40xLfJclx5GQgzI9PFfUqHd6mmkmDbJlHGl7Nqw7dZb7CL7ATBn1Qk8592THbpNkj/FEC7cDo++a5P8JAvWcdvozfe8btiWxdcsqWrlP7KQsCbLtUnBuXf5hfcKD62tcC5hYJRe9AbMa2QRMdH8CSqjGI+OfvurOQ=
+  on:
+    tags: true
