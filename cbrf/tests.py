@@ -7,7 +7,8 @@ from unittest import TestCase
 from xml.etree.ElementTree import Element
 
 from cbrf import (get_currencies_info, get_daily_rates, get_dynamic_rates)
-from cbrf.models import Currency, DailyCurrencyRecord, DynamicCurrencyRecord, CurrenciesInfo, DailyCurrenciesRates
+from cbrf.models import Currency, DailyCurrencyRecord, DynamicCurrencyRecord, CurrenciesInfo, DailyCurrenciesRates, \
+    DynamicCurrenciesRates
 
 
 class CbrfAPITestCase(TestCase):
@@ -92,3 +93,14 @@ class CbrfModelsTestCase(TestCase):
 
         bad_id = 'gg wp'
         self.assertIsNone(daily_rates.get_by_id(bad_id))
+
+    def test_dynamic_currencies_rates(self):
+        date_1 = datetime(2001, 3, 2)
+        date_2 = datetime(2001, 3, 14)
+        id_code = 'R01235'
+
+        dynamic_rates = DynamicCurrenciesRates(date_1, date_2, id_code)
+
+        self.assertEqual(len(dynamic_rates.rates), 8)
+        self.assertEqual(dynamic_rates.get_by_date(datetime(2001, 3, 8)).value, Decimal('28.6200'))
+        self.assertIsNone(dynamic_rates.get_by_date(datetime(3000, 1, 1)), None)

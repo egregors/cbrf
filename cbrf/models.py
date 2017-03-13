@@ -14,8 +14,7 @@ import datetime
 from decimal import Decimal
 from xml.etree.ElementTree import Element
 
-from cbrf import get_currencies_info
-from cbrf import get_daily_rates
+from cbrf import *
 from cbrf.utils import str_to_date
 
 
@@ -153,5 +152,31 @@ class DailyCurrenciesRates(object):
     def get_by_id(self, id_code: str) -> DailyCurrencyRecord or None:
         try:
             return [_ for _ in self.rates if _.id == id_code][0]
+        except IndexError:
+            return None
+
+
+class DynamicCurrenciesRates(object):
+    """ Full set of dynamic currency rates """
+
+    def __init__(self, date_1: datetime.datetime, date_2: datetime.datetime, id_code: str):
+        self._raw_dynamic_rates = get_dynamic_rates(date_req1=date_1, date_req2=date_2, currency_id=id_code)
+        self.date_1 = str_to_date(self._raw_dynamic_rates.attrib['DateRange1'])
+        self.date_2 = str_to_date(self._raw_dynamic_rates.attrib['DateRange2'])
+        self.id = self._raw_dynamic_rates.attrib['ID']
+
+        self.rates = list()
+
+        for rate in self._raw_dynamic_rates:
+            self.rates.append(DynamicCurrencyRecord(rate))
+
+    def __str__(self):
+        return f'[{len(self.rates)}] from ' \
+               f'{self.date_1.strftime("%d/%m/%Y")} ' \
+               f'to {self.date_2.strftime("%d/%m/%Y")}'
+
+    def get_by_date(self, date: datetime.datetime) -> DynamicCurrencyRecord or None:
+        try:
+            return [_ for _ in self.rates if _.date == date][0]
         except IndexError:
             return None
