@@ -15,6 +15,7 @@ deploy:
     tags: true
     repo: Egregors/cbrf
     all_branches: true
+    distributions: sdist bdist_wheel
 notifications:
   slack:
     rooms:
