@@ -50,7 +50,7 @@ class Currency(object):
         self.iso_char_code = elem.findtext('ISO_Char_Code')
 
 
-class DailyCurrencyRate(object):
+class DailyCurrencyRecord(object):
     """ Class to deserialize response like:
 
     http://www.cbr.ru/scripts/XML_daily.asp?date_req=02/03/2002
@@ -67,21 +67,21 @@ class DailyCurrencyRate(object):
 
     def __init__(self, elem: Element):
         if elem:
-            self._parse_daily_currency_rate_xml(elem)
+            self._parse_daily_currency_record_xml(elem)
 
     def __str__(self):
         return f'[{self.id}]: {self.value}₽ за {self.denomination} {self.name}'
 
-    def _parse_daily_currency_rate_xml(self, elem: Element):
+    def _parse_daily_currency_record_xml(self, elem: Element):
         self.id = elem.attrib['ID']
-        self.num_code = elem.find('NumCode').text
-        self.char_code = elem.find('CharCode').text
-        self.denomination = int(elem.find('Nominal').text)
-        self.name = elem.find('Name').text
-        self.value = Decimal(elem.find('Value').text.replace(',', '.'))
+        self.num_code = elem.findtext('NumCode')
+        self.char_code = elem.findtext('CharCode')
+        self.denomination = int(elem.findtext('Nominal'))
+        self.name = elem.findtext('Name')
+        self.value = Decimal(elem.findtext('Value').replace(',', '.'))
 
 
-class DynamicCurrencyRate(object):
+class DynamicCurrencyRecord(object):
     """ Class to deserialize response like:
 
      http://www.cbr.ru/scripts/XML_dynamic.asp?date_req1=02/03/2001&date_req2=14/03/2001&VAL_NM_RQ=R01235
@@ -95,16 +95,16 @@ class DynamicCurrencyRate(object):
 
     def __init__(self, elem: Element):
         if elem:
-            self._parse_dynamic_currency_rate(elem)
+            self._parse_dynamic_currency_record(elem)
 
     def __str__(self):
         return f'[{self.id} | {self.date}]: {self.value}'
 
-    def _parse_dynamic_currency_rate(self, elem: Element):
+    def _parse_dynamic_currency_record(self, elem: Element):
         self.id = elem.attrib['Id']
         self.date = str_to_date(elem.attrib['Date'])
-        self.denomination = int(elem.find('Nominal').text)
-        self.value = Decimal(elem.find('Value').text.replace(',', '.'))
+        self.denomination = int(elem.findtext('Nominal'))
+        self.value = Decimal(elem.findtext('Value').replace(',', '.'))
 
 
 class CurrenciesInfo(object):
