@@ -6,6 +6,7 @@ _Обертка для работы с API Центробанка_
 _Wrapper for The Central Bank of the Russian Federation site API_
 
 [![Build Status](https://travis-ci.org/Egregors/cbrf.svg?branch=master)](https://travis-ci.org/Egregors/cbrf)
+[![PyPI version](https://badge.fury.io/py/cbrf.svg)](https://badge.fury.io/py/cbrf)
 
 **[RU]**
 
