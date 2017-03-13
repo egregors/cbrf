@@ -13,6 +13,7 @@ from __future__ import unicode_literals, absolute_import
 from decimal import Decimal
 from xml.etree.ElementTree import Element
 
+from cbrf import get_currencies_info
 from cbrf.utils import str_to_date
 
 
@@ -41,11 +42,12 @@ class Currency(object):
 
     def _parse_currency_xml(self, elem: Element):
         self.id = elem.attrib['ID']
-        self.name = elem.find('Name').text
-        self.eng_name = elem.find('EngName').text
-        self.denomination = int(elem.find('Nominal').text)
-        self.iso_num_code = int(elem.find('ISO_Num_Code').text)
-        self.iso_char_code = elem.find('ISO_Char_Code').text
+        self.name = elem.findtext('Name')
+        self.eng_name = elem.findtext('EngName')
+        self.denomination = int(elem.findtext('Nominal'))
+        _iso_num_code = elem.findtext('ISO_Num_Code')
+        self.iso_num_code = int(_iso_num_code) if _iso_num_code else None
+        self.iso_char_code = elem.findtext('ISO_Char_Code')
 
 
 class DailyCurrencyRate(object):
@@ -103,3 +105,28 @@ class DynamicCurrencyRate(object):
         self.date = str_to_date(elem.attrib['Date'])
         self.denomination = int(elem.find('Nominal').text)
         self.value = Decimal(elem.find('Value').text.replace(',', '.'))
+
+
+class CurrenciesInfo(object):
+    """ Full set of currencies information from http://www.cbr.ru/scripts/XML_valFull.asp """
+
+    def __init__(self):
+        self._raw_currencies = get_currencies_info()
+        self.currencies = list()
+
+        for currency in self._raw_currencies:
+            self.currencies.append(Currency(currency))
+
+    def __str__(self):
+        return f'Currencies Info [{len(self.currencies)}]'
+
+    def get_by_id(self, id_code: str) -> Currency or None:
+        """ Get currency by ID
+
+        :param id_code: set, like "R01305"
+        :return: currency or None.
+        """
+        try:
+            return [_ for _ in self.currencies if _.id == id_code][0]
+        except IndexError:
+            return None

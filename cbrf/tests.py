@@ -7,7 +7,7 @@ from unittest import TestCase
 from xml.etree.ElementTree import Element
 
 from cbrf import (get_currencies_info, get_daily_rate, get_dynamic_rates)
-from cbrf.models import Currency, DailyCurrencyRate, DynamicCurrencyRate
+from cbrf.models import Currency, DailyCurrencyRate, DynamicCurrencyRate, CurrenciesInfo
 
 
 class CbrfAPITestCase(TestCase):
@@ -64,3 +64,12 @@ class CbrfModelsTestCase(TestCase):
 
         self.assertEqual(d.denomination, 1)
         self.assertEqual(d.value, Decimal('28.6200'))
+
+    def test_correncies_info(self):
+        c_info = CurrenciesInfo()
+        self.assertEqual(len(c_info.currencies), 60)
+
+        irish_pound_id = 'R01305'
+        irish_pound = c_info.get_by_id(irish_pound_id)
+        self.assertEqual(irish_pound.id, irish_pound_id)
+        self.assertEqual(irish_pound.iso_num_code, 372)
