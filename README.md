@@ -14,7 +14,12 @@ _Wrapper for The Central Bank of the Russian Federation site API_
  
 ## Установка
 
-Клонировать рекозиторий и установить из исходников:
+Стабильная версия:
+
+```
+    pip install cbrf
+```
+Версия для разработчиков:
 ```
     git clone https://github.com/Egregors/cbrf.git
     cd cbrf
@@ -101,7 +106,13 @@ pytest cbrf/tests.py
  
 ## Installation
 
-Clone this repo and install from the source:
+Stable version:
+
+```
+    pip install cbrf
+```
+
+Dev version:
 ```
     git clone https://github.com/Egregors/cbrf.git
     cd cbrf
