@@ -75,10 +75,10 @@ def get_dynamic_rates(date_req1: datetime.datetime,
     :return: :class: `Element <Element 'ValCurs'>` object
     :rtype: ElementTree.Element
     """
-    url = const.CBRF_API_URLS['dynamic'] + \
-          f'date_req1={utils.date_to_str(date_req1)}&' \
-          f'date_req2={utils.date_to_str(date_req2)}&' \
-          f'VAL_NM_RQ={currency_id}'
+    url = const.CBRF_API_URLS['dynamic'] + 'date_req1={}&date_req2={}&VAL_NM_RQ={}'.format(
+        utils.date_to_str(date_req1),
+        utils.date_to_str(date_req2),
+        currency_id)
 
     response = requests.get(url=url)
     response.encoding = 'windows-1251'

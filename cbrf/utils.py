@@ -18,7 +18,7 @@ def date_to_str(date: datetime.datetime) -> str:
     :return: date str in right format
     :rtype: str
     """
-    return f'{date.strftime("%d/%m/%Y")}' if date else ''
+    return '{}'.format(date.strftime("%d/%m/%Y")) if date else ''
 
 
 def str_to_date(date: str) -> datetime.datetime:

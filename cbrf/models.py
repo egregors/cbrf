@@ -39,7 +39,7 @@ class Currency(object):
             self._parse_currency_xml(elem)
 
     def __str__(self):
-        return f'[{self.id}]: {self.name}/{self.eng_name}'
+        return '[{}]: {}/{}'.format(self.id, self.name, self.eng_name)
 
     def _parse_currency_xml(self, elem: Element):
         self.id = elem.attrib['ID']
@@ -71,7 +71,7 @@ class DailyCurrencyRecord(object):
             self._parse_daily_currency_record_xml(elem)
 
     def __str__(self):
-        return f'[{self.id}]: {self.value}₽ за {self.denomination} {self.name}'
+        return '[{}]: {}₽ за {} {}'.format(self.id, self.value, self.denomination, self.name)
 
     def _parse_daily_currency_record_xml(self, elem: Element):
         self.id = elem.attrib['ID']
@@ -99,7 +99,7 @@ class DynamicCurrencyRecord(object):
             self._parse_dynamic_currency_record(elem)
 
     def __str__(self):
-        return f'[{self.id} | {self.date}]: {self.value}'
+        return '[{} | {}]: {}'.format(self.id, self.date, self.value)
 
     def _parse_dynamic_currency_record(self, elem: Element):
         self.id = elem.attrib['Id']
@@ -120,7 +120,7 @@ class CurrenciesInfo(object):
             self.currencies.append(Currency(currency))
 
     def __str__(self):
-        return f'Currencies Info [{len(self.currencies)}]'
+        return 'Currencies Info [{}]'.format(len(self.currencies))
 
     def get_by_id(self, id_code: str) -> Currency or None:
         """ Get currency by ID
@@ -147,7 +147,7 @@ class DailyCurrenciesRates(object):
             self.rates.append(DailyCurrencyRecord(rate))
 
     def __str__(self):
-        return f'[{len(self.rates)}] rates for {self.date.strftime("%d/%m/%Y")}'
+        return '[{}] rates for {}'.format(len(self.rates), self.date.strftime("%d/%m/%Y"))
 
     def get_by_id(self, id_code: str) -> DailyCurrencyRecord or None:
         try:
@@ -171,9 +171,9 @@ class DynamicCurrenciesRates(object):
             self.rates.append(DynamicCurrencyRecord(rate))
 
     def __str__(self):
-        return f'[{len(self.rates)}] from ' \
-               f'{self.date_1.strftime("%d/%m/%Y")} ' \
-               f'to {self.date_2.strftime("%d/%m/%Y")}'
+        return '[{}] from {} to {}'.format(len(self.rates),
+                                           self.date_1.strftime("%d/%m/%Y"),
+                                           self.date_2.strftime("%d/%m/%Y"))
 
     def get_by_date(self, date: datetime.datetime) -> DynamicCurrencyRecord or None:
         try:

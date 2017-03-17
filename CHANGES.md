@@ -6,3 +6,6 @@ Changes
 
 #### ver.: 0.2 (13.01.2017)
 * Deleted unused files
+
+#### ver.: 0.3 (17.01.2017)
+* Add Python 3.5 support
