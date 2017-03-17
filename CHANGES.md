@@ -9,3 +9,6 @@ Changes
 
 #### ver.: 0.3 (17.01.2017)
 * Add Python 3.5 support
+
+#### ver.: 0.3.2 (17.01.2017)
+* Unicode support for docs
