@@ -18,6 +18,6 @@ Source: https://github.com/Egregors/cbr
 """
 
 __title__ = 'cbrf'
-__version__ = '0.3.2'
+__version__ = '0.3.3'
 
 from .api import get_currencies_info, get_daily_rates, get_dynamic_rates

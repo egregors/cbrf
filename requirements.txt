@@ -1,3 +1,0 @@
-# requirements for cbrf
-
-requests==2.13.0

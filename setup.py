@@ -1,18 +1,24 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals, absolute_import
 
+import ast
+import re
 from distutils.core import setup
 
-from setuptools import find_packages
+_version_re = re.compile(r'__version__\s+=\s+(.*)')
 
-from cbrf import __version__
+with open('cbrf/__init__.py', 'rb') as f:
+    version = str(ast.literal_eval(_version_re.search(
+        f.read().decode('utf-8')).group(1)))
+
+print(version)
 
 setup(
     name='cbrf',
-    version=__version__,
-    packages=find_packages(),
+    version=version,
+    packages=['cbrf'],
     install_requires=[
-        "requests==2.13.0",
+        "requests",
     ],
     url='https://github.com/Egregors/cbrf',
     license='MIT',
