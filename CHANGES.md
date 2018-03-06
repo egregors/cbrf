@@ -17,3 +17,6 @@ Changes
 * Fixed setup issues
 * Remove requirements
 * Remove RU README
+
+#### ver.: 0.4 (06.02.2018)
+* Changed encoding for CBRF XML reply from windows-1251 to utf-8
