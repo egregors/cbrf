@@ -20,3 +20,9 @@ Changes
 
 #### ver.: 0.4 (06.02.2018)
 * Changed encoding for CBRF XML reply from windows-1251 to utf-8
+
+#### ver.: 0.4.1 (06.02.2018)
+* Fix readme decoding.
+
+#### ver.: 0.4.2 (06.02.2018)
+* Bump PyPI
