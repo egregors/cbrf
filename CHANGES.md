@@ -26,3 +26,6 @@ Changes
 
 #### ver.: 0.4.2 (06.02.2018)
 * Bump PyPI
+
+#### ver.: 0.4.3 (07.02.2018)
+* Requests autoencoding
