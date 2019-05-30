@@ -26,6 +26,14 @@ Dev version:
     pip install -e .
 ```
 
+## Settings
+For using with your own hostname set environment variables, for example 
+
+```
+export CBRF_URL_SCHEME=http
+export CBRF_URL_HOST=www.my-own-cbr.ru
+```
+ 
 ## How to use
 
 ### API
