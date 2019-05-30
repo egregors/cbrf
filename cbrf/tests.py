@@ -15,7 +15,7 @@ class CbrfAPITestCase(TestCase):
         cur_inf = get_currencies_info()
 
         self.assertIsInstance(cur_inf, Element)
-        self.assertEqual(len(cur_inf), 60)
+        self.assertEqual(len(cur_inf), 61)
 
     def test_get_daily_rate(self):
         date = datetime(2014, 10, 24)
@@ -41,12 +41,12 @@ class CbrfModelsTestCase(TestCase):
     def test_currency_model(self):
         c = Currency(get_currencies_info()[0])
 
-        self.assertEqual(c.id, 'R01500')
-        self.assertEqual(c.name, 'Молдавский лей')
-        self.assertEqual(c.eng_name, 'Moldova Lei')
-        self.assertEqual(c.denomination, 10)
-        self.assertEqual(c.iso_num_code, 498)
-        self.assertEqual(c.iso_char_code, 'MDL')
+        self.assertEqual(c.id, 'R01010')
+        self.assertEqual(c.name, 'Австралийский доллар')
+        self.assertEqual(c.eng_name, 'Australian Dollar')
+        self.assertEqual(c.denomination, 1)
+        self.assertEqual(c.iso_num_code, 36)
+        self.assertEqual(c.iso_char_code, 'AUD')
 
     def test_daily_currency_rate(self):
         d = DailyCurrencyRecord(get_daily_rates()[0])
@@ -67,7 +67,7 @@ class CbrfModelsTestCase(TestCase):
 
     def test_correncies_info(self):
         c_info = CurrenciesInfo()
-        self.assertEqual(len(c_info.currencies), 60)
+        self.assertEqual(len(c_info.currencies), 61)
 
         irish_pound_id = 'R01305'
         irish_pound = c_info.get_by_id(irish_pound_id)
