@@ -13,7 +13,7 @@ deploy:
     secure: fTqNmQ68pJ12/Sc5qk6fDcvw7NqgpRcGfjMVI6kdO5tgO3lQe0lJprylNtwRtJF4iqcfcBwdQ/RrxaIOwRzl4Jw31FSkdq3jp4lH4bLARfFPI0d1Vq/aYoiKnMjty/3U4dUeHLHviiiqukCl5ZJ+XM3WJfLp4xppibIqV0Hb96TylAfU9Zk7PL9Jm+LATX8Mw+Yyec/WmlTiKPGzuv9ukwpvBu2vBOn8SPJoXxjyJbi3gMuFvTmUXtP+3u3MKMTuaDKeq5w156mW2kn76swEHn65Ak4aeAhxHoTKBmYbQikOYq89NYlOSqYrIKtVzE8oR8mRov9aaOpwrQO7ESNEwyQIdhHPTAxyc9ByogYmfaLZdKQdDAPK2n1eUfzUZXFblPvG9DM5rO7S5VBYiax8O5rbGfOd/NN4mNyz7Et2tK5KsmXqKMsrMuzXEEqQV+wKjuly0TxknjeYCDA52k7Izt3ubjCnf3sSVyzPKIWEafYKU7XpjuBoSbCACt1eL4LxPcFL1hq70odOJLj3ltDQZ3DBjCFXjfcjm0JvSWJ8qACFCFriIXpE8b0m01U38/Xzc9cpCP8jhoTuCS7yCDWAYS3R/ge25UGGeQ0AvhW+PVbhYayb47IL8aKVN/PHxJPuzpAya6nBY9Fujidt9Ybfgu/JfRNtBp8Zhge3mjI0Hns=
   on:
     tags: true
-    repo: Egregors/cbrf
+    repo: egregors/cbrf
     all_branches: true
     distributions: sdist bdist_wheel
 notifications:

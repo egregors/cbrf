@@ -29,3 +29,10 @@ Changes
 
 #### ver.: 0.4.3 (07.02.2018)
 * Requests autoencoding
+
+#### ver.: 0.4.4 (15.08.2019)
+* Custom header for cbr.ru requests
+
+
+#### ver.: 0.4.5 (15.08.2019)
+* Travis repo path update 

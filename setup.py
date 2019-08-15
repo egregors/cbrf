@@ -20,7 +20,7 @@ setup(
     install_requires=[
         "requests",
     ],
-    url='https://github.com/Egregors/cbrf',
+    url='https://github.com/egregors/cbrf',
     license='MIT',
     author='Vadim Iskuchekov (@egregors)',
     author_email='egregors@yandex.ru',
