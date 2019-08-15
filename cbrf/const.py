@@ -18,3 +18,7 @@ CBRF_API_URLS = {
     'daily_eng': '{}/scripts/XML_daily_eng.asp?'.format(CBRF_URL),
     'dynamic': '{}/scripts/XML_dynamic.asp?'.format(CBRF_URL),
 }
+
+CBRF_HEADERS = {
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:68.0) Gecko/20100101 Firefox/68.0'
+}

@@ -27,7 +27,7 @@ def get_currencies_info() -> Element:
     :return: :class: `Element <Element 'Valuta'>` object
     :rtype: ElementTree.Element
     """
-    response = requests.get(const.CBRF_API_URLS['info'])
+    response = requests.get(const.CBRF_API_URLS['info'], headers=const.CBRF_HEADERS)
 
     return XML(response.text)
 
@@ -53,7 +53,7 @@ def get_daily_rates(date_req: datetime.datetime = None, lang: str = 'rus') -> El
 
     url = base_url + 'date_req=' + utils.date_to_str(date_req) if date_req else base_url
 
-    response = requests.get(url=url)
+    response = requests.get(url=url, headers=const.CBRF_HEADERS)
 
     return XML(response.text)
 
@@ -78,6 +78,6 @@ def get_dynamic_rates(date_req1: datetime.datetime,
         utils.date_to_str(date_req2),
         currency_id)
 
-    response = requests.get(url=url)
+    response = requests.get(url=url, headers=const.CBRF_HEADERS)
 
     return XML(response.text)
