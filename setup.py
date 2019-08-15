@@ -26,6 +26,7 @@ setup(
     author_email='egregors@yandex.ru',
     description='Wrapper for The Central Bank of the Russian Federation site API',
     long_description=open('README.md', 'r', encoding='utf-8').read(),
+    long_description_content_type='text/markdown',
     classifiers=[
         "Development Status :: 4 - Beta",
         "Environment :: Web Environment",

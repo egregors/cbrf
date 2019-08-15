@@ -36,3 +36,6 @@ Changes
 
 #### ver.: 0.4.5 (15.08.2019)
 * Travis repo path update 
+
+#### ver.: 0.4.5 (15.08.2019)
+* Update long_description_content_type
