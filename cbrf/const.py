@@ -12,3 +12,7 @@ CBRF_API_URLS = {
     'daily_eng': 'http://www.cbr.ru/scripts/XML_daily_eng.asp?',
     'dynamic': 'http://www.cbr.ru/scripts/XML_dynamic.asp?',
 }
+
+CBRF_HEADERS = {
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:68.0) Gecko/20100101 Firefox/68.0'
+}
