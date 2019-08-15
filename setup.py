@@ -1,9 +1,7 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals, absolute_import
-
 import ast
 import re
-from distutils.core import setup
+
+from setuptools import setup
 
 _version_re = re.compile(r'__version__\s+=\s+(.*)')
 
