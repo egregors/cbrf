@@ -98,10 +98,10 @@ class CurrenciesInfo:
 
     def __init__(self):
         self._raw_currencies = get_currencies_info()
-        # TODO: it should be a hashmap
-        self.currencies = list()
+        self.currencies = dict()
         for currency in self._raw_currencies:
-            self.currencies.append(Currency(currency))
+            cur = Currency(currency)
+            self.currencies[cur.id] = cur
 
     def __str__(self) -> str:
         return f"Currencies Info [{len(self.currencies)}]"
@@ -112,10 +112,7 @@ class CurrenciesInfo:
         :param:     id_code: str, like "R01305"
         :return:    currency or None.
         """
-        try:
-            return [_ for _ in self.currencies if _.id == id_code][0]
-        except IndexError:
-            return None
+        return self.currencies.get(id_code)
 
 
 class DailyCurrenciesRates:
@@ -125,11 +122,11 @@ class DailyCurrenciesRates:
         self._raw_daily_rates = get_daily_rates(date_req=date, lang=lang)
         self.date = str_to_date(self._raw_daily_rates.attrib["Date"])
 
-        # TODO: it should be a hashmap
-        self.rates = list()
+        self.rates = dict()
 
         for rate in self._raw_daily_rates:
-            self.rates.append(DailyCurrencyRecord(rate))
+            record = DailyCurrencyRecord(rate)
+            self.rates[record.id] = record
 
     def __str__(self) -> str:
         return "[{}] rates for {}".format(
@@ -137,10 +134,7 @@ class DailyCurrenciesRates:
         )
 
     def get_by_id(self, id_code: str) -> DailyCurrencyRecord or None:
-        try:
-            return [_ for _ in self.rates if _.id == id_code][0]
-        except IndexError:
-            return None
+        return self.rates.get(id_code)
 
 
 class DynamicCurrenciesRates:
@@ -156,11 +150,11 @@ class DynamicCurrenciesRates:
         self.date_2 = str_to_date(self._raw_dynamic_rates.attrib["DateRange2"])
         self.id = self._raw_dynamic_rates.attrib["ID"]
 
-        # TODO: it should be a hashmap
-        self.rates = list()
+        self.rates = dict()
 
         for rate in self._raw_dynamic_rates:
-            self.rates.append(DynamicCurrencyRecord(rate))
+            record = DynamicCurrencyRecord(rate)
+            self.rates[record.date] = record
 
     def __str__(self):
         return "[{}] from {} to {}".format(
@@ -170,7 +164,4 @@ class DynamicCurrenciesRates:
         )
 
     def get_by_date(self, date: datetime.datetime) -> DynamicCurrencyRecord or None:
-        try:
-            return [_ for _ in self.rates if _.date == date][0]
-        except IndexError:
-            return None
+        return self.rates.get(date)
