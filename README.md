@@ -10,7 +10,7 @@ _Wrapper for The Central Bank of the Russian Federation site API_
 
 [Site](http://www.cbr.ru/) and [API](http://www.cbr.ru/scripts/Root.asp?PrtId=SXML)
  of The Central Bank of the Russian Federation.
- 
+
 ## Installation
 
 Stable version:
@@ -27,13 +27,13 @@ Dev version:
 ```
 
 ## Settings
-For using with your own hostname set environment variables, for example 
+For using with your own hostname set environment variables, for example
 
 ```
 export CBRF_URL_SCHEME=http
 export CBRF_URL_HOST=www.my-own-cbr.ru
 ```
- 
+
 ## How to use
 
 ### API
@@ -103,11 +103,11 @@ Decimal('28.6200')
 To run tests:
 
 ```
-pytest cbrf/tests.py 
+pytest cbrf/tests.py
 ```
 > You should install `pytest` first
 
 ## Contributing
 
-Bug reports, bug fixes, and new features are always welcome. 
+Bug reports, bug fixes, and new features are always welcome.
 Please open issues, and submit pull requests for any new code.

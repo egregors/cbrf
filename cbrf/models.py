@@ -1,25 +1,13 @@
-# -*- coding: utf-8 -*-
-"""
-cbrf.models
-~~~~~~~~
-
-This module implements models for comfortable work with cbrf wrapper API.
-
-:copyright: (c) 2017 by Vadim Iskuchekov (@egregors)
-:license: MIT
-"""
-from __future__ import unicode_literals, absolute_import
-
 import datetime
 from decimal import Decimal
 from xml.etree.ElementTree import Element
 
-from cbrf import *
+from cbrf import get_currencies_info, get_daily_rates, get_dynamic_rates
 from cbrf.utils import str_to_date
 
 
-class Currency(object):
-    """ Class to deserialize response like:
+class Currency:
+    """Class to deserialize response like:
 
     http://www.cbr.ru/scripts/XML_valFull.asp
 
@@ -39,20 +27,20 @@ class Currency(object):
             self._parse_currency_xml(elem)
 
     def __str__(self):
-        return '[{}]: {}/{}'.format(self.id, self.name, self.eng_name)
+        return f"[{self.id}]: {self.name}/{self.eng_name}"
 
     def _parse_currency_xml(self, elem: Element):
-        self.id = elem.attrib['ID']
-        self.name = elem.findtext('Name')
-        self.eng_name = elem.findtext('EngName')
-        self.denomination = int(elem.findtext('Nominal'))
-        _iso_num_code = elem.findtext('ISO_Num_Code')
+        self.id = elem.attrib["ID"]
+        self.name = elem.findtext("Name")
+        self.eng_name = elem.findtext("EngName")
+        self.denomination = int(elem.findtext("Nominal"))
+        _iso_num_code = elem.findtext("ISO_Num_Code")
         self.iso_num_code = int(_iso_num_code) if _iso_num_code else None
-        self.iso_char_code = elem.findtext('ISO_Char_Code')
+        self.iso_char_code = elem.findtext("ISO_Char_Code")
 
 
-class DailyCurrencyRecord(object):
-    """ Class to deserialize response like:
+class DailyCurrencyRecord:
+    """Class to deserialize response like:
 
     http://www.cbr.ru/scripts/XML_daily.asp?date_req=02/03/2002
 
@@ -71,26 +59,26 @@ class DailyCurrencyRecord(object):
             self._parse_daily_currency_record_xml(elem)
 
     def __str__(self):
-        return '[{}]: {}₽ за {} {}'.format(self.id, self.value, self.denomination, self.name)
+        return f"[{self.id}]: {self.value}₽ за {self.denomination} {self.name}"
 
     def _parse_daily_currency_record_xml(self, elem: Element):
-        self.id = elem.attrib['ID']
-        self.num_code = elem.findtext('NumCode')
-        self.char_code = elem.findtext('CharCode')
-        self.denomination = int(elem.findtext('Nominal'))
-        self.name = elem.findtext('Name')
-        self.value = Decimal(elem.findtext('Value').replace(',', '.'))
+        self.id = elem.attrib["ID"]
+        self.num_code = elem.findtext("NumCode")
+        self.char_code = elem.findtext("CharCode")
+        self.denomination = int(elem.findtext("Nominal"))
+        self.name = elem.findtext("Name")
+        self.value = Decimal(elem.findtext("Value").replace(",", "."))
 
 
-class DynamicCurrencyRecord(object):
-    """ Class to deserialize response like:
+class DynamicCurrencyRecord:
+    """Class to deserialize response like:
 
-     http://www.cbr.ru/scripts/XML_dynamic.asp?date_req1=02/03/2001&date_req2=14/03/2001&VAL_NM_RQ=R01235
+    http://www.cbr.ru/scripts/XML_dynamic.asp?date_req1=02/03/2001&date_req2=14/03/2001&VAL_NM_RQ=R01235
 
-     <Record Date="02.03.2001" Id="R01235">
-         <Nominal>1</Nominal>
-         <Value>28,6200</Value>
-     </Record>
+    <Record Date="02.03.2001" Id="R01235">
+        <Nominal>1</Nominal>
+        <Value>28,6200</Value>
+    </Record>
 
     """
 
@@ -99,17 +87,17 @@ class DynamicCurrencyRecord(object):
             self._parse_dynamic_currency_record(elem)
 
     def __str__(self):
-        return '[{} | {}]: {}'.format(self.id, self.date, self.value)
+        return f"[{self.id} | {self.date}]: {self.value}"
 
     def _parse_dynamic_currency_record(self, elem: Element):
-        self.id = elem.attrib['Id']
-        self.date = str_to_date(elem.attrib['Date'])
-        self.denomination = int(elem.findtext('Nominal'))
-        self.value = Decimal(elem.findtext('Value').replace(',', '.'))
+        self.id = elem.attrib["Id"]
+        self.date = str_to_date(elem.attrib["Date"])
+        self.denomination = int(elem.findtext("Nominal"))
+        self.value = Decimal(elem.findtext("Value").replace(",", "."))
 
 
-class CurrenciesInfo(object):
-    """ Full set of currencies information from http://www.cbr.ru/scripts/XML_valFull.asp """
+class CurrenciesInfo:
+    """Full set of currencies information from http://www.cbr.ru/scripts/XML_valFull.asp"""
 
     def __init__(self):
         self._raw_currencies = get_currencies_info()
@@ -120,10 +108,10 @@ class CurrenciesInfo(object):
             self.currencies.append(Currency(currency))
 
     def __str__(self):
-        return 'Currencies Info [{}]'.format(len(self.currencies))
+        return f"Currencies Info [{len(self.currencies)}]"
 
     def get_by_id(self, id_code: str) -> Currency or None:
-        """ Get currency by ID
+        """Get currency by ID
 
         :param id_code: set, like "R01305"
         :return: currency or None.
@@ -134,12 +122,12 @@ class CurrenciesInfo(object):
             return None
 
 
-class DailyCurrenciesRates(object):
-    """ Full set of daily rates """
+class DailyCurrenciesRates:
+    """Full set of daily rates"""
 
-    def __init__(self, date: datetime.datetime = None, lang: str = 'rus'):
+    def __init__(self, date: datetime.datetime = None, lang: str = "rus"):
         self._raw_daily_rates = get_daily_rates(date_req=date, lang=lang)
-        self.date = str_to_date(self._raw_daily_rates.attrib['Date'])
+        self.date = str_to_date(self._raw_daily_rates.attrib["Date"])
 
         self.rates = list()
 
@@ -147,7 +135,9 @@ class DailyCurrenciesRates(object):
             self.rates.append(DailyCurrencyRecord(rate))
 
     def __str__(self):
-        return '[{}] rates for {}'.format(len(self.rates), self.date.strftime("%d/%m/%Y"))
+        return "[{}] rates for {}".format(
+            len(self.rates), self.date.strftime("%d/%m/%Y")
+        )
 
     def get_by_id(self, id_code: str) -> DailyCurrencyRecord or None:
         try:
@@ -156,14 +146,18 @@ class DailyCurrenciesRates(object):
             return None
 
 
-class DynamicCurrenciesRates(object):
-    """ Full set of dynamic currency rates """
+class DynamicCurrenciesRates:
+    """Full set of dynamic currency rates"""
 
-    def __init__(self, date_1: datetime.datetime, date_2: datetime.datetime, id_code: str):
-        self._raw_dynamic_rates = get_dynamic_rates(date_req1=date_1, date_req2=date_2, currency_id=id_code)
-        self.date_1 = str_to_date(self._raw_dynamic_rates.attrib['DateRange1'])
-        self.date_2 = str_to_date(self._raw_dynamic_rates.attrib['DateRange2'])
-        self.id = self._raw_dynamic_rates.attrib['ID']
+    def __init__(
+        self, date_1: datetime.datetime, date_2: datetime.datetime, id_code: str
+    ):
+        self._raw_dynamic_rates = get_dynamic_rates(
+            date_req1=date_1, date_req2=date_2, currency_id=id_code
+        )
+        self.date_1 = str_to_date(self._raw_dynamic_rates.attrib["DateRange1"])
+        self.date_2 = str_to_date(self._raw_dynamic_rates.attrib["DateRange2"])
+        self.id = self._raw_dynamic_rates.attrib["ID"]
 
         self.rates = list()
 
@@ -171,9 +165,11 @@ class DynamicCurrenciesRates(object):
             self.rates.append(DynamicCurrencyRecord(rate))
 
     def __str__(self):
-        return '[{}] from {} to {}'.format(len(self.rates),
-                                           self.date_1.strftime("%d/%m/%Y"),
-                                           self.date_2.strftime("%d/%m/%Y"))
+        return "[{}] from {} to {}".format(
+            len(self.rates),
+            self.date_1.strftime("%d/%m/%Y"),
+            self.date_2.strftime("%d/%m/%Y"),
+        )
 
     def get_by_date(self, date: datetime.datetime) -> DynamicCurrencyRecord or None:
         try:
