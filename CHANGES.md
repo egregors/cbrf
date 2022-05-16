@@ -35,10 +35,16 @@ Changes
 
 
 #### ver.: 0.4.5 (15.08.2019)
-* Travis repo path update 
+* Travis repo path update
 
 #### ver.: 0.4.6 (15.08.2019)
 * Update long_description_content_type
 
 #### ver.: 0.4.7 (15.08.2019)
 * i hate pypi
+
+#### ver.: 0.5.0 (16.05.2022)
+* add debug logging
+* data structures optimizing
+* add pre-commit hooks
+* replace Travis with GitHub Actions
