@@ -42,3 +42,9 @@ Changes
 
 #### ver.: 0.4.7 (15.08.2019)
 * i hate pypi
+
+#### ver.: 0.5.0 (16.05.2022)
+* add debug logging
+* data structures optimizing
+* add pre-commit hooks
+* replace Travis with GitHub Actions

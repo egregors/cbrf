@@ -2,10 +2,10 @@
 
 _Wrapper for The Central Bank of the Russian Federation site API_
 
-[![Build Status](https://travis-ci.org/Egregors/cbrf.svg?branch=master)](https://travis-ci.org/Egregors/cbrf)
+[![Build Status](https://github.com/egregors/cbrf/actions/workflows/python-package.yml/badge.svg)](https://github.com/egregors/cbrf/actions)
 [![PyPI version](https://badge.fury.io/py/cbrf.svg)](https://badge.fury.io/py/cbrf)
 
-[Site](http://www.cbr.ru/) and [API](http://www.cbr.ru/scripts/Root.asp?PrtId=SXML)
+[Site](https://www.cbr.ru/) and [API](https://www.cbr.ru/scripts/Root.asp?PrtId=SXML)
 of The Central Bank of the Russian Federation.
 
 ## Installation
@@ -29,8 +29,7 @@ Dev version:
 For using with your own hostname set environment variables, for example
 
 ```
-export CBRF_DEBUG=True
-export CBRF_URL_SCHEME=http
+export CBRF_URL_SCHEME=https
 export CBRF_URL_HOST=www.my-own-cbr.ru
 ```
 
@@ -57,7 +56,7 @@ To get raw XML answers you should use `cbrf.api` methods:
 
 ### Models
 
-Also you can user base models for work with API (see examples in the tests).
+You can use base models for work with API (see examples in the tests).
 
 `CurrenciesInfo`
 
@@ -107,7 +106,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 ### Linting & Tests
 
-To run tests:
+To run lint & tests:
 
 ```shell
 make lint
