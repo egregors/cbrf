@@ -5,7 +5,7 @@ lint:  ## Run pre-commit hooks
 	pre-commit run -a
 
 test:  ## Run tests
-	pytest cbrf/tests.py
+	pytest
 
 
 ## Help
