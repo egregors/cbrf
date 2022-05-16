@@ -1,5 +1,7 @@
-.DEFAULT_GOAL := help
+.DEFAULT_GOAL := check
 .PHONY: help test lint
+
+check: lint test ## Run linting and tests
 
 lint:  ## Run pre-commit hooks
 	pre-commit run -a

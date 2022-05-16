@@ -1,9 +1,12 @@
 import datetime
+import logging
 from xml.etree.ElementTree import XML, Element
 
 import requests
 
 from . import const, utils
+
+logger = logging.getLogger(__name__)
 
 
 def get_currencies_info() -> Element:
@@ -14,7 +17,11 @@ def get_currencies_info() -> Element:
     :return:    `Element <Element 'Valuta'>` object
     :rtype:     ElementTree.Element
     """
+    logger.debug("Performing get_currencies_info")
+    logger.debug("Request to %s", const.CBRF_API_URLS["info"])
     response = requests.get(const.CBRF_API_URLS["info"], headers=const.CBRF_HEADERS)
+    logger.debug("Resp: %s", response.status_code)
+    logger.debug("Body: %s", response.text)
 
     return XML(response.text)
 
@@ -32,6 +39,7 @@ def get_daily_rates(date_req: datetime.datetime = None, lang: str = "rus") -> El
     :return:            `Element <Element 'ValCurs'>` object
     :rtype:             ElementTree.Element
     """
+    logger.debug("Performing get_daily_rates")
     if lang not in ["rus", "eng"]:
         raise ValueError('"lang" must be string. "rus" or "eng"')
 
@@ -42,8 +50,10 @@ def get_daily_rates(date_req: datetime.datetime = None, lang: str = "rus") -> El
     )
 
     url = base_url + "date_req=" + utils.date_to_str(date_req) if date_req else base_url
-
+    logger.debug("Request to %s | %s : %s", url, lang, date_req)
     response = requests.get(url=url, headers=const.CBRF_HEADERS)
+    logger.debug("Resp: %s", response.status_code)
+    logger.debug("Body: %s", response.text)
 
     return XML(response.text)
 
@@ -63,12 +73,18 @@ def get_dynamic_rates(
     :return:                `Element <Element 'ValCurs'>` object
     :rtype:                 ElementTree.Element
     """
+    logger.debug("Performing get_dynamic_rates")
     url = const.CBRF_API_URLS[
         "dynamic"
     ] + "date_req1={}&date_req2={}&VAL_NM_RQ={}".format(
         utils.date_to_str(date_req1), utils.date_to_str(date_req2), currency_id
     )
 
+    logger.debug(
+        "Request to %s | %s between %s and %s", url, currency_id, date_req1, date_req2
+    )
     response = requests.get(url=url, headers=const.CBRF_HEADERS)
+    logger.debug("Resp: %s", response.status_code)
+    logger.debug("Body: %s", response.text)
 
     return XML(response.text)
