@@ -9,24 +9,23 @@ from cbrf.utils import str_to_date
 class Currency:
     """Class to deserialize response like:
 
-    http://www.cbr.ru/scripts/XML_valFull.asp
+    https://www.cbr.ru/scripts/XML_valFull.asp
 
-    <Item ID="R01500">
-        <Name>Молдавский лей</Name>
-        <EngName>Moldova Lei</EngName>
-        <Nominal>10</Nominal>
-        <ParentCode>R01500</ParentCode>
-        <ISO_Num_Code>498</ISO_Num_Code>
-        <ISO_Char_Code>MDL</ISO_Char_Code>
-    </Item>
-
+        <Item ID="R01500">
+            <Name>Молдавский лей</Name>
+            <EngName>Moldova Lei</EngName>
+            <Nominal>10</Nominal>
+            <ParentCode>R01500</ParentCode>
+            <ISO_Num_Code>498</ISO_Num_Code>
+            <ISO_Char_Code>MDL</ISO_Char_Code>
+        </Item>
     """
 
     def __init__(self, elem: Element):
         if elem:
             self._parse_currency_xml(elem)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"[{self.id}]: {self.name}/{self.eng_name}"
 
     def _parse_currency_xml(self, elem: Element):
@@ -42,23 +41,22 @@ class Currency:
 class DailyCurrencyRecord:
     """Class to deserialize response like:
 
-    http://www.cbr.ru/scripts/XML_daily.asp?date_req=02/03/2002
+    https://www.cbr.ru/scripts/XML_daily.asp?date_req=02/03/2002
 
-    <Valute ID="R01010">
-        <NumCode>036</NumCode>
-        <CharCode>AUD</CharCode>
-        <Nominal>1</Nominal>
-        <Name>Австралийский доллар</Name>
-        <Value>16,0102</Value>
-    </Valute>
-
+        <Valute ID="R01010">
+            <NumCode>036</NumCode>
+            <CharCode>AUD</CharCode>
+            <Nominal>1</Nominal>
+            <Name>Австралийский доллар</Name>
+            <Value>16,0102</Value>
+        </Valute>
     """
 
     def __init__(self, elem: Element):
         if elem:
             self._parse_daily_currency_record_xml(elem)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"[{self.id}]: {self.value}₽ за {self.denomination} {self.name}"
 
     def _parse_daily_currency_record_xml(self, elem: Element):
@@ -73,13 +71,12 @@ class DailyCurrencyRecord:
 class DynamicCurrencyRecord:
     """Class to deserialize response like:
 
-    http://www.cbr.ru/scripts/XML_dynamic.asp?date_req1=02/03/2001&date_req2=14/03/2001&VAL_NM_RQ=R01235
+    https://www.cbr.ru/scripts/XML_dynamic.asp?date_req1=02/03/2001&date_req2=14/03/2001&VAL_NM_RQ=R01235
 
-    <Record Date="02.03.2001" Id="R01235">
-        <Nominal>1</Nominal>
-        <Value>28,6200</Value>
-    </Record>
-
+        <Record Date="02.03.2001" Id="R01235">
+            <Nominal>1</Nominal>
+            <Value>28,6200</Value>
+        </Record>
     """
 
     def __init__(self, elem: Element):
@@ -97,24 +94,23 @@ class DynamicCurrencyRecord:
 
 
 class CurrenciesInfo:
-    """Full set of currencies information from http://www.cbr.ru/scripts/XML_valFull.asp"""
+    """Full set of currencies information from https://www.cbr.ru/scripts/XML_valFull.asp"""
 
     def __init__(self):
         self._raw_currencies = get_currencies_info()
-
+        # TODO: it should be a hashmap
         self.currencies = list()
-
         for currency in self._raw_currencies:
             self.currencies.append(Currency(currency))
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Currencies Info [{len(self.currencies)}]"
 
     def get_by_id(self, id_code: str) -> Currency or None:
         """Get currency by ID
 
-        :param id_code: set, like "R01305"
-        :return: currency or None.
+        :param:     id_code: str, like "R01305"
+        :return:    currency or None.
         """
         try:
             return [_ for _ in self.currencies if _.id == id_code][0]
@@ -129,12 +125,13 @@ class DailyCurrenciesRates:
         self._raw_daily_rates = get_daily_rates(date_req=date, lang=lang)
         self.date = str_to_date(self._raw_daily_rates.attrib["Date"])
 
+        # TODO: it should be a hashmap
         self.rates = list()
 
         for rate in self._raw_daily_rates:
             self.rates.append(DailyCurrencyRecord(rate))
 
-    def __str__(self):
+    def __str__(self) -> str:
         return "[{}] rates for {}".format(
             len(self.rates), self.date.strftime("%d/%m/%Y")
         )
@@ -159,6 +156,7 @@ class DynamicCurrenciesRates:
         self.date_2 = str_to_date(self._raw_dynamic_rates.attrib["DateRange2"])
         self.id = self._raw_dynamic_rates.attrib["ID"]
 
+        # TODO: it should be a hashmap
         self.rates = list()
 
         for rate in self._raw_dynamic_rates:

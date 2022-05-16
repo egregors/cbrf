@@ -114,4 +114,4 @@ class CbrfModelsTestCase(TestCase):
         self.assertEqual(
             dynamic_rates.get_by_date(datetime(2001, 3, 8)).value, Decimal("28.6200")
         )
-        self.assertIsNone(dynamic_rates.get_by_date(datetime(3000, 1, 1)), None)
+        self.assertIsNone(dynamic_rates.get_by_date(datetime(3000, 1, 1)))
