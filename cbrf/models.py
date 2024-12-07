@@ -22,7 +22,7 @@ class Currency:
     """
 
     def __init__(self, elem: Element):
-        if elem:
+        if elem is not None and len(elem) > 0:
             self._parse_currency_xml(elem)
 
     def __str__(self) -> str:
@@ -34,7 +34,11 @@ class Currency:
         self.eng_name = elem.findtext("EngName")
         self.denomination = int(elem.findtext("Nominal"))
         _iso_num_code = elem.findtext("ISO_Num_Code")
-        self.iso_num_code = int(_iso_num_code) if _iso_num_code else None
+        self.iso_num_code = (
+            int(_iso_num_code)
+            if _iso_num_code is not None and len(_iso_num_code) > 0
+            else None
+        )
         self.iso_char_code = elem.findtext("ISO_Char_Code")
 
 
@@ -53,7 +57,7 @@ class DailyCurrencyRecord:
     """
 
     def __init__(self, elem: Element):
-        if elem:
+        if elem is not None and len(elem) > 0:
             self._parse_daily_currency_record_xml(elem)
 
     def __str__(self) -> str:
@@ -80,7 +84,7 @@ class DynamicCurrencyRecord:
     """
 
     def __init__(self, elem: Element):
-        if elem:
+        if elem is not None and len(elem) > 0:
             self._parse_dynamic_currency_record(elem)
 
     def __str__(self):

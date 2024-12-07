@@ -2,8 +2,10 @@ from datetime import datetime
 from decimal import Decimal
 from unittest import TestCase
 from xml.etree.ElementTree import Element
+from unittest import IsolatedAsyncioTestCase
 
 from cbrf import get_currencies_info, get_daily_rates, get_dynamic_rates
+from cbrf import asyncio as cbrf_asyncio
 from cbrf.models import (
     CurrenciesInfo,
     Currency,
@@ -19,7 +21,7 @@ class CbrfAPITestCase(TestCase):
         cur_inf = get_currencies_info()
 
         self.assertIsInstance(cur_inf, Element)
-        self.assertEqual(len(cur_inf), 61)
+        self.assertEqual(len(cur_inf), 70)
 
     def test_get_daily_rate(self):
         date = datetime(2014, 10, 24)
@@ -35,6 +37,35 @@ class CbrfAPITestCase(TestCase):
         date_2 = datetime(2001, 3, 14)
 
         rates = get_dynamic_rates(
+            date_req1=date_1, date_req2=date_2, currency_id="R01235"
+        )
+
+        self.assertEqual(len(rates), 8)
+        self.assertEqual(rates[0].find("Nominal").text, "1")
+        self.assertEqual(rates[0].find("Value").text, "28,6200")
+
+
+class CbrfAPIAsyncTestCase(IsolatedAsyncioTestCase):
+    async def test_currencies_info_async(self):
+        cur_inf = await cbrf_asyncio.get_currencies_info()
+
+        self.assertIsInstance(cur_inf, Element)
+        self.assertEqual(len(cur_inf), 70)
+
+    async def test_get_daily_rate_async(self):
+        date = datetime(2014, 10, 24)
+        rates = await cbrf_asyncio.get_daily_rates(date_req=date)
+
+        aud = rates[0]
+
+        self.assertEqual(aud.attrib["ID"], "R01010")
+        self.assertEqual(aud.find("Value").text, "36,4126")
+
+    async def test_get_dynamic_rates_async(self):
+        date_1 = datetime(2001, 3, 2)
+        date_2 = datetime(2001, 3, 14)
+
+        rates = await cbrf_asyncio.get_dynamic_rates(
             date_req1=date_1, date_req2=date_2, currency_id="R01235"
         )
 
@@ -75,9 +106,9 @@ class CbrfModelsTestCase(TestCase):
         self.assertEqual(d.denomination, 1)
         self.assertEqual(d.value, Decimal("28.6200"))
 
-    def test_correncies_info(self):
+    def test_currencies_info(self):
         c_info = CurrenciesInfo()
-        self.assertEqual(len(c_info.currencies), 61)
+        self.assertEqual(len(c_info.currencies), 70)
 
         irish_pound_id = "R01305"
         irish_pound = c_info.get_by_id(irish_pound_id)
@@ -109,6 +140,84 @@ class CbrfModelsTestCase(TestCase):
         id_code = "R01235"
 
         dynamic_rates = DynamicCurrenciesRates(date_1, date_2, id_code)
+
+        self.assertEqual(len(dynamic_rates.rates), 8)
+        self.assertEqual(
+            dynamic_rates.get_by_date(datetime(2001, 3, 8)).value, Decimal("28.6200")
+        )
+        self.assertIsNone(dynamic_rates.get_by_date(datetime(3000, 1, 1)))
+
+
+class CbrfAsyncModelsTestCase(IsolatedAsyncioTestCase):
+    async def test_currency_model(self):
+        c = Currency((await cbrf_asyncio.get_currencies_info())[0])
+
+        self.assertEqual(c.id, "R01010")
+        self.assertEqual(c.name, "Австралийский доллар")
+        self.assertEqual(c.eng_name, "Australian Dollar")
+        self.assertEqual(c.denomination, 1)
+        self.assertEqual(c.iso_num_code, 36)
+        self.assertEqual(c.iso_char_code, "AUD")
+
+    async def test_daily_currency_rate(self):
+        d = DailyCurrencyRecord((await cbrf_asyncio.get_daily_rates())[0])
+
+        self.assertEqual(d.id, "R01010")
+        self.assertEqual(d.num_code, "036")
+        self.assertEqual(d.char_code, "AUD")
+        self.assertEqual(d.denomination, 1)
+        self.assertEqual(d.name, "Австралийский доллар")
+
+    async def test_dynamic_currency_rate(self):
+        date_1 = datetime(2001, 3, 2)
+        date_2 = datetime(2001, 3, 14)
+        d = DynamicCurrencyRecord(
+            (
+                await cbrf_asyncio.get_dynamic_rates(
+                    date_req1=date_1, date_req2=date_2, currency_id="R01235"
+                )
+            )[0]
+        )
+
+        self.assertEqual(d.denomination, 1)
+        self.assertEqual(d.value, Decimal("28.6200"))
+
+    async def test_currencies_info(self):
+        c_info = await cbrf_asyncio.CurrenciesInfo().create()
+        self.assertEqual(len(c_info.currencies), 70)
+
+        irish_pound_id = "R01305"
+        irish_pound = c_info.get_by_id(irish_pound_id)
+        self.assertEqual(irish_pound.id, irish_pound_id)
+        self.assertEqual(irish_pound.iso_num_code, 372)
+
+        bad_id = "lol"
+        self.assertIsNone(c_info.get_by_id(bad_id))
+
+    async def test_daily_currencies_rates(self):
+        date = datetime(2007, 1, 20)
+        daily_rates = await cbrf_asyncio.DailyCurrenciesRates().create(date)
+
+        self.assertEqual(daily_rates.date, date)
+        self.assertEqual(len(daily_rates.rates), 18)
+
+        gbp_id = "R01035"
+        gbp = daily_rates.get_by_id(gbp_id)
+
+        self.assertEqual(gbp.id, gbp_id)
+        self.assertEqual(gbp.num_code, "826")
+
+        bad_id = "gg wp"
+        self.assertIsNone(daily_rates.get_by_id(bad_id))
+
+    async def test_dynamic_currencies_rates(self):
+        date_1 = datetime(2001, 3, 2)
+        date_2 = datetime(2001, 3, 14)
+        id_code = "R01235"
+
+        dynamic_rates = await cbrf_asyncio.DynamicCurrenciesRates().create(
+            date_1, date_2, id_code
+        )
 
         self.assertEqual(len(dynamic_rates.rates), 8)
         self.assertEqual(

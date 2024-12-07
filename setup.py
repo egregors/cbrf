@@ -18,6 +18,7 @@ setup(
     packages=["cbrf"],
     install_requires=[
         "requests",
+        "aiohttp",
     ],
     url="https://github.com/egregors/cbrf",
     license="MIT",

@@ -37,10 +37,11 @@ export CBRF_URL_HOST=www.my-own-cbr.ru
 
 ### API
 
-To get raw XML answers you should use `cbrf.api` methods:
+To get raw XML answers you should use `cbrf.api` or `cbrf.asyncio.api` methods:
 
 ```
 >>> import cbrf
+>>> from cbrf.const import CurrencyCodes
 
 >>> cbrf.get_currencies_info()
 <Element 'Valuta' at 0x10b91f688>
@@ -50,8 +51,19 @@ To get raw XML answers you should use `cbrf.api` methods:
 
 >>> date_1 = datetime(2001, 3, 2)
 >>> date_2 = datetime(2001, 3, 14)
->>> get_dynamic_rates(date_req1=date_1, date_req2=date_2, currency_id='R01235')
+>>> get_dynamic_rates(date_req1=date_1, date_req2=date_2, currency_id=CurrencyCodes.USD)
 <Element 'ValCurs' at 0x1107017c8>
+
+>>> import asyncio
+
+>>> asyncio.run(cbrf.asyncio.get_currencies_info())
+<Element 'Valuta' at 0x102492ca0>
+
+>>> asyncio.run(cbrf.asyncio.get_daily_rates())
+<Element 'ValCurs' at 0x104c36c00>
+
+>>> asyncio.run(cbrf.asyncio.get_dynamic_rates(date_req1=date_1, date_req2=date_2, currency_id=CurrencyCodes.USD))
+<Element 'ValCurs' at 0x1026a4860>
 ```
 
 ### Models
@@ -68,6 +80,15 @@ You can use base models for work with API (see examples in the tests).
 'Ирландский фунт'
 >>> c_info.get_by_id("R01305").eng_name
 'Irish Pound'
+
+>>> import asyncio
+>>> from cbrf.asyncio import CurrenciesInfo
+
+>>> c_info = asyncio.run(CurrenciesInfo().create())
+>>> c_info.get_by_id("R01305").name
+'Ирландский фунт'
+>>> c_info.get_by_id("R01305").eng_name
+'Irish Pound'
 ```
 
 `DailyCurrenciesRates`
@@ -76,6 +97,17 @@ You can use base models for work with API (see examples in the tests).
 >>> from cbrf.models import DailyCurrenciesRates
 
 >>> daily = DailyCurrenciesRates()
+>>> daily.date
+datetime.datetime(2017, 3, 11, 0, 0)
+>>> daily.get_by_id('R01035').name
+'Фунт стерлингов Соединенного королевства'
+>>> daily.get_by_id('R01035').value
+Decimal('72.0143')
+
+>>> import asyncio
+>>> from cbrf.asyncio import DailyCurrenciesRates
+
+>>> daily = asyncio.run(DailyCurrenciesRates().create())
 >>> daily.date
 datetime.datetime(2017, 3, 11, 0, 0)
 >>> daily.get_by_id('R01035').name
@@ -95,6 +127,17 @@ Decimal('72.0143')
 >>> dynamic_rates = DynamicCurrenciesRates(date_1, date_2, id_code)
 >>> dynamic_rates.get_by_date(datetime(2001, 3, 8)).value
 Decimal('28.6200')
+
+>>> import asyncio
+>>> from cbrf.asyncio import DynamicCurrenciesRates
+
+>>> date_1 = datetime(2001, 3, 2)
+... date_2 = datetime(2001, 3, 14)
+... id_code = 'R01235'
+>>> dynamic_rates = asyncio.run(DynamicCurrenciesRates(date_1, date_2, id_code).create())
+>>> dynamic_rates.get_by_date(datetime(2001, 3, 8)).value
+Decimal('28.6200')
+
 ```
 
 Also, you can show `DEBUG` info, by setting logger level to DEBUG in your code:

@@ -1,10 +1,12 @@
 import os
+from enum import Enum
 
-CURRENCY_CODES = {
+
+class CurrencyCodes(str, Enum):
     # https://www.cbr.ru/scripts/XML_val.asp?d=0
-    "USD": "R01235",
-    "EUR": "R01239",
-}
+    USD = "R01235"
+    EUR = "R01239"
+
 
 CBRF_URL_SCHEME = os.getenv("CBRF_URL_SCHEME", "https")
 CBRF_URL_HOST = os.getenv("CBRF_URL_HOST", "www.cbr.ru")
