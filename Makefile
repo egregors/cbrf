@@ -9,6 +9,12 @@ lint:  ## Run pre-commit hooks
 test:  ## Run tests
 	pytest
 
+build:  ## Build package before publication
+	python3 setup.py sdist bdist_wheel
+	twine check dist/*
+
+publish:  ## Upload package to PyPI
+	twine upload dist/*
 
 ## Help
 
