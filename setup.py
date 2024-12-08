@@ -15,9 +15,10 @@ print(version)
 setup(
     name="cbrf",
     version=version,
-    packages=["cbrf"],
+    packages=["cbrf", "cbrf.asyncio"],
     install_requires=[
         "requests",
+        "aiohttp",
     ],
     url="https://github.com/egregors/cbrf",
     license="MIT",
