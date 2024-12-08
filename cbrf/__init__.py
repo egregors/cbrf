@@ -11,7 +11,7 @@ Source:     https://github.com/egregors/cbr
 """
 
 __title__ = "cbrf"
-__version__ = "0.5.0"
+__version__ = "1.0.0"
 
 from .api import get_currencies_info, get_daily_rates, get_dynamic_rates
 

@@ -48,3 +48,7 @@ Changes
 * data structures optimizing
 * add pre-commit hooks
 * replace Travis with GitHub Actions
+
+#### ver.: 1.0.0 (08.12.2024)
+* [breaking!] drop python versions 3.6 and 3.7 support
+* add asyncio support @complicat9d
